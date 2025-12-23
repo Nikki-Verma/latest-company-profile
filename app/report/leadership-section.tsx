@@ -3,7 +3,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Users, ExternalLink, Calendar, Briefcase } from "lucide-react"
-import Image from "next/image"
 
 interface LeadershipSectionProps {
   data: any
@@ -15,7 +14,7 @@ export default function LeadershipSection({ data }: LeadershipSectionProps) {
   return (
     <div className="space-y-6">
       {/* Leadership Overview */}
-      <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+      <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 pdf-avoid-break">
         <CardHeader className="pb-4">
           <CardTitle className="text-xl font-bold text-blue-900 flex items-center gap-2">
             <Users className="h-6 w-6" />
@@ -52,18 +51,23 @@ export default function LeadershipSection({ data }: LeadershipSectionProps) {
       </Card>
 
       {/* Leadership Profiles */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pdf-leadership-grid">
         {leadership.map((leader: any, index: number) => (
-          <Card key={index} className="hover:shadow-lg transition-shadow">
+          <Card key={index} className="hover:shadow-lg transition-shadow pdf-avoid-break pdf-leadership-card" style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
             <CardHeader className="pb-4">
               <div className="flex items-start gap-4">
-                <div className="relative">
-                  <Image
-                    src={leader.avatar || "/placeholder.svg?height=80&width=80&query=executive"}
+                <div className="relative flex-shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={leader.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(leader.name || 'User')}&size=80&background=3B82F6&color=fff&bold=true`}
                     alt={leader.name}
                     width={80}
                     height={80}
-                    className="rounded-full border-4 border-white shadow-md"
+                    className="rounded-full border-4 border-white shadow-md w-20 h-20 object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(leader.name || 'User')}&size=80&background=3B82F6&color=fff&bold=true`;
+                    }}
                   />
                   <div className="absolute -bottom-2 -right-2 bg-blue-600 text-white rounded-full p-1">
                     <Users className="h-3 w-3" />
@@ -139,7 +143,7 @@ export default function LeadershipSection({ data }: LeadershipSectionProps) {
       </div>
 
       {/* Leadership Summary */}
-      <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
+      <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200 pdf-avoid-break">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5 text-gray-700" />
